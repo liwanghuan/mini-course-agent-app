@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mini-course-agent-backend"
+version = "0.1.0"
+description = "FastAPI backend for a Claude-powered mini-course multi-agent demo"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.92.0",
+    "fastapi>=0.110.0",
+    "openai>=1.109.0",
+    "pydantic>=2.7.0",
+    "python-dotenv>=1.0.1",
+    "sse-starlette>=1.6.5",
+    "uvicorn>=0.27.1",
+]
+
+[project.optional-dependencies]
+test = [
+    "httpx>=0.28.1",
+    "pytest>=8.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-q"
+
+[tool.setuptools.packages.find]
+include = ["app*"]

@@ -1,0 +1,390 @@
+:root {
+  color: #102a43;
+  background: linear-gradient(180deg, #eef4ff 0%, #f7fafc 42%, #f4f7fb 100%);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: #2457f5;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button.secondary {
+  background: #e0e7ff;
+  color: #1d4ed8;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  outline: 3px solid rgba(36, 87, 245, 0.25);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.shell {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 32px 20px 48px;
+}
+
+.hero,
+.panel {
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  border-radius: 22px;
+  padding: 24px;
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.5fr);
+  gap: 24px;
+  margin-bottom: 22px;
+}
+
+.hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(32px, 4vw, 48px);
+  letter-spacing: -0.04em;
+}
+
+.eyebrow,
+.stats span,
+.memory span,
+.lessonSummary span,
+.lessonBlock span,
+label span {
+  display: block;
+  color: #627d98;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 6px;
+}
+
+.setupForm {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 180px;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.stats,
+.mainColumn,
+.sideColumn,
+.timeline,
+.memory,
+.agentGrid {
+  display: grid;
+  gap: 12px;
+}
+
+.stats div,
+.timeline div,
+.memory > div,
+.empty,
+.grade,
+.agentCard,
+.lessonSummary,
+.lessonBlock,
+.exampleCard,
+.vocabularyGrid > div {
+  background: #f8fbff;
+  border: 1px solid #d9e2ef;
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(340px, 0.55fr);
+  gap: 22px;
+  align-items: start;
+}
+
+.sideColumn {
+  position: sticky;
+  top: 20px;
+}
+
+.lessonPanel {
+  padding: 28px;
+}
+
+.lessonHeader h2 {
+  font-size: 30px;
+  letter-spacing: -0.03em;
+  margin: 0 0 8px;
+}
+
+.lesson,
+.quiz {
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.goal {
+  color: #486581;
+  font-size: 16px;
+}
+
+.conceptChips,
+.miniChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.conceptChips span,
+.miniChips em {
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #0369a1;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 9px;
+}
+
+.lessonSummary {
+  margin: 22px 0 16px;
+  background: #eef6ff;
+  border-color: #bfdbfe;
+}
+
+.lessonSummary p,
+.lessonBlock p,
+.exampleCard p,
+.vocabularyGrid p {
+  margin: 0;
+  line-height: 1.65;
+  color: #334e68;
+}
+
+.lessonSectionGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.lessonBlock h3,
+.lessonExamples h3,
+.lessonSupportGrid h3 {
+  margin: 0 0 8px;
+}
+
+.lessonBlock.concept {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.lessonBlock.example,
+.exampleCard {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.lessonExamples,
+.lessonSupportGrid,
+.lessonFallback,
+.practiceGrid {
+  margin-top: 16px;
+}
+
+.lessonSupportGrid,
+.practiceGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.vocabularyGrid {
+  display: grid;
+  gap: 10px;
+}
+
+.takeawayList {
+  margin: 0;
+  padding-left: 22px;
+  line-height: 1.8;
+}
+
+.lessonFallback {
+  color: #486581;
+}
+
+.lessonFallback summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+label {
+  display: grid;
+  gap: 6px;
+}
+
+input,
+select {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: white;
+}
+
+.panel button {
+  margin-top: 16px;
+}
+
+.grade.wrong {
+  background: #fff7ed;
+  border-color: #fed7aa;
+}
+
+.grade.correct {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.compactPanel {
+  padding: 18px;
+}
+
+.compactPanel h2 {
+  margin-top: 0;
+}
+
+.agentCard {
+  display: grid;
+  gap: 4px;
+}
+
+.agentCard span {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.agentCard.pending span {
+  background: #e2e8f0;
+  color: #475569;
+}
+
+.agentCard.running {
+  border-color: #93c5fd;
+  background: #eff6ff;
+}
+
+.agentCard.running span {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.agentCard.completed {
+  border-color: #bbf7d0;
+  background: #f0fdf4;
+}
+
+.agentCard.completed span {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.agentCard.error {
+  border-color: #fecdd3;
+  background: #fff1f2;
+}
+
+.agentCard.error span {
+  background: #ffe4e6;
+  color: #be123c;
+}
+
+.agentCard p,
+.memory p {
+  margin: 0;
+  color: #486581;
+}
+
+.timeline div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timeline span {
+  text-align: right;
+}
+
+.memory ol,
+.memory ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.currentPart {
+  background: #eef6ff;
+  border-radius: 10px;
+  padding: 8px;
+}
+
+.error {
+  margin-bottom: 20px;
+  color: #9f1239;
+  border: 1px solid #fecdd3;
+  background: #fff1f2;
+}
+
+@media (max-width: 1050px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .sideColumn {
+    position: static;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero,
+  .setupForm,
+  .lessonSectionGrid,
+  .lessonSupportGrid,
+  .practiceGrid {
+    grid-template-columns: 1fr;
+  }
+}

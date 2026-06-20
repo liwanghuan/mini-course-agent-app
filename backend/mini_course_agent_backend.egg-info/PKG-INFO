@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: mini-course-agent-backend
+Version: 0.1.0
+Summary: FastAPI backend for a Claude-powered mini-course multi-agent demo
+Requires-Python: >=3.11
+Requires-Dist: anthropic>=0.92.0
+Requires-Dist: fastapi>=0.110.0
+Requires-Dist: openai>=1.109.0
+Requires-Dist: pydantic>=2.7.0
+Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: sse-starlette>=1.6.5
+Requires-Dist: uvicorn>=0.27.1
+Provides-Extra: test
+Requires-Dist: httpx>=0.28.1; extra == "test"
+Requires-Dist: pytest>=8.0.0; extra == "test"
