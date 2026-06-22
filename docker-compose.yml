@@ -1,0 +1,18 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8081:8081"
+    environment:
+      PORT: 8081
+      COURSE_AGENT_MODE: openai
+      OPENAI_MODEL: gpt-4.1-mini
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      FRONTEND_ORIGINS: ${FRONTEND_ORIGINS:-*}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8081/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

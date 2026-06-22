@@ -17,6 +17,7 @@ from app.settings import FRONTEND_ORIGINS
 logger = logging.getLogger(__name__)
 
 app = FastAPI(title="Mini-Course Agent API", version="0.1.0")
+_allow_all_origins = "*" in FRONTEND_ORIGINS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -25,11 +26,18 @@ app.add_middleware(
         "http://127.0.0.1:5173",
         "http://localhost:5175",
         "http://127.0.0.1:5175",
-    ],
-    allow_credentials=True,
+    ]
+    if not _allow_all_origins
+    else ["*"],
+    allow_credentials=not _allow_all_origins,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.get("/")
+def root():
+    return {"ok": True, "service": "mini-course-agent-api"}
 
 
 @app.get("/api/health")

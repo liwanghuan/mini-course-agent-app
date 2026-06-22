@@ -85,38 +85,130 @@ VITE_API_BASE_URL=http://127.0.0.1:8081/api npm run dev -- --host 127.0.0.1 --po
 
 Recommended production setup:
 
-- Backend: Render Web Service
+- Backend: AWS or Alibaba Cloud container service
 - Frontend: Vercel Vite app
 - LLM mode: OpenAI, configured only on the backend
 
+The backend now has a portable Docker deployment, so it does not need Render.
+
+There is no real frontend/backend URL deadlock. Deploy in two passes:
+
+1. Deploy the backend first with temporary permissive CORS.
+2. Deploy the frontend using the backend URL.
+3. Update backend CORS to the final Vercel URL.
+
 ### 1. Push this project to GitHub
 
-Render and Vercel both deploy most easily from a GitHub repository.
+Cloud providers and Vercel both deploy most easily from a GitHub repository.
 
-### 2. Deploy backend on Render
+### 2. Deploy backend with Docker
 
-1. In Render, create a new **Blueprint** or **Web Service** from this repo.
-2. If using the included `render.yaml`, Render will use:
-   - Root directory: `backend`
-   - Build command: `pip install -r requirements.txt`
-   - Start command: `uvicorn app.main:app --host 0.0.0.0 --port $PORT`
-   - Health check: `/api/health`
-3. Set environment variables in Render:
+The backend can run anywhere that supports Docker.
+
+Local container smoke test:
+
+```bash
+cd /Users/bytedance/Documents/mini-course-agent-app
+OPENAI_API_KEY=sk-... FRONTEND_ORIGINS='*' docker compose up --build backend
+```
+
+Then verify:
+
+```text
+http://127.0.0.1:8081/
+http://127.0.0.1:8081/api/health
+```
+
+The container uses:
+
+```text
+backend/Dockerfile
+```
+
+Runtime command:
+
+```bash
+uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8081}
+```
+
+Required backend environment variables:
 
 ```env
 COURSE_AGENT_MODE=openai
 OPENAI_API_KEY=sk-...
 OPENAI_MODEL=gpt-4.1-mini
-FRONTEND_ORIGINS=https://your-vercel-app.vercel.app
+FRONTEND_ORIGINS=*
 ```
 
-After Render deploys, copy the backend URL, for example:
+`FRONTEND_ORIGINS=*` is only for the first deployment so the backend can start before the Vercel URL exists. Do not keep `*` for a student-facing production app.
+
+### Option A: AWS App Runner backend
+
+AWS App Runner is the simplest AWS option for this backend.
+
+1. Push the repo to GitHub.
+2. In AWS App Runner, create a service from source code.
+3. Choose this repo and set source directory to:
 
 ```text
-https://mini-course-agent-backend.onrender.com
+backend
 ```
 
-### 3. Deploy frontend on Vercel
+4. Use Dockerfile deployment. App Runner should detect:
+
+```text
+backend/Dockerfile
+```
+
+5. Set environment variables:
+
+```env
+PORT=8081
+COURSE_AGENT_MODE=openai
+OPENAI_API_KEY=sk-...
+OPENAI_MODEL=gpt-4.1-mini
+FRONTEND_ORIGINS=*
+```
+
+6. Deploy and copy the App Runner service URL, for example:
+
+```text
+https://xxxxx.awsapprunner.com
+```
+
+7. Verify:
+
+```text
+https://xxxxx.awsapprunner.com/api/health
+```
+
+### Option B: Alibaba Cloud backend
+
+Use Alibaba Cloud Container Registry plus either Elastic Container Instance, ACK, or ECS. The most straightforward path is ECS with Docker.
+
+On an ECS machine with Docker installed:
+
+```bash
+git clone https://github.com/liwanghuan/mini-course-agent-app.git
+cd mini-course-agent-app
+export OPENAI_API_KEY=sk-...
+export FRONTEND_ORIGINS='*'
+docker compose up -d --build backend
+```
+
+Open inbound traffic for port `8081` in the ECS security group, then verify:
+
+```text
+http://<ecs-public-ip>:8081/api/health
+```
+
+For production, put a domain and HTTPS reverse proxy in front of it, for example Nginx + TLS, then use:
+
+```text
+https://api.your-domain.com/api/health
+```
+
+### 3. Deploy frontend on Vercel second
 
 1. In Vercel, import the same GitHub repo.
 2. Set the project root directory to:
@@ -125,29 +217,59 @@ https://mini-course-agent-backend.onrender.com
 frontend
 ```
 
-3. Set the environment variable:
+3. Set the environment variable using the real backend URL:
 
 ```env
-VITE_API_BASE_URL=https://your-render-backend.onrender.com/api
+VITE_API_BASE_URL=https://your-backend-url/api
+```
+
+Examples:
+
+```env
+VITE_API_BASE_URL=https://xxxxx.awsapprunner.com/api
+```
+
+or:
+
+```env
+VITE_API_BASE_URL=https://api.your-domain.com/api
 ```
 
 4. Deploy.
 
-### 4. Update backend CORS after Vercel URL is known
+After Vercel deploys, copy the frontend URL, for example:
 
-After Vercel gives you the final frontend URL, update Render's backend environment variable:
+```text
+https://mini-course-agent-app.vercel.app
+```
+
+### 4. Lock backend CORS to the final frontend URL
+
+After Vercel gives you the final frontend URL, replace the backend's temporary CORS value:
 
 ```env
-FRONTEND_ORIGINS=https://your-vercel-app.vercel.app
+FRONTEND_ORIGINS=https://mini-course-agent-app.vercel.app
 ```
 
 If you use more than one frontend URL, separate them with commas:
 
 ```env
-FRONTEND_ORIGINS=https://your-vercel-app.vercel.app,https://your-custom-domain.com
+FRONTEND_ORIGINS=https://mini-course-agent-app.vercel.app,https://your-custom-domain.com
 ```
 
-Then redeploy/restart the Render service.
+Then restart/redeploy the backend service.
+
+### Deployment URL dependency summary
+
+Use this order:
+
+```text
+Backend with FRONTEND_ORIGINS=* temporarily
+  -> get backend URL
+  -> Vercel frontend with VITE_API_BASE_URL=<Backend URL>/api
+  -> get Vercel frontend URL
+  -> Backend FRONTEND_ORIGINS=<Vercel URL>
+```
 
 ## Verification
 
